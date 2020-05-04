@@ -6,11 +6,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class LinkedList_T {
+  private LinkedList<Point> pointList;
   private LinkedList<Integer> list;
 
   @Before
   public void setup() {
     list = new LinkedList<>();
+    pointList = new LinkedList<>();
   }
 
   @Test
@@ -208,5 +210,63 @@ public class LinkedList_T {
     }
 
     Assert.assertFalse(itr.hasNext());
+  }
+
+  @Test
+  public void testObjectContains() {
+    int size = 10;
+
+    Assert.assertEquals(0, pointList.size());
+    for (int i = 0; i < size; i++) {
+      Point point = new Point(i, i);
+      pointList.insertEnd(point);
+    }
+
+    Assert.assertEquals(size, pointList.size());
+
+    for (int i = 0; i < size; i++) {
+      Point point = new Point(i, i);
+      Assert.assertTrue(pointList.contains(point));
+    }
+
+    Point point = new Point(11,11);
+    Assert.assertFalse(pointList.contains(point));
+  }
+
+  @Test
+  public void testRemoveFirstObjectOccurrence() {
+    Point point0 = new Point(0,0);
+    Point point1 = new Point(1,1);
+    pointList.insertEnd(point0);
+    pointList.insertEnd(point1);
+    pointList.insertEnd(point0);
+
+    Point point3 = new Point(0,0);
+    Assert.assertTrue(pointList.remove(point3));
+    Assert.assertEquals(2, pointList.size());
+
+    Assert.assertEquals(point1, pointList.front());
+    Assert.assertEquals(point0, pointList.back());
+  }
+
+  static class Point {
+    private int x;
+    private int y;
+
+    public Point(int x, int y) {
+      this.x = x;
+      this.y = y;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == null) {
+        return false;
+      }
+      if (!(obj instanceof Point)) {
+        return false;
+      }
+      return (x == ((Point) obj).x && y == ((Point) obj).y);
+    }
   }
 }
